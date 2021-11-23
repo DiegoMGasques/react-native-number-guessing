@@ -1,15 +1,34 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import * as Font from "expo-font";
+import AppLoading from "expo-app-loading";
 
 import Header from "./components/Header";
 import GameOverScreen from "./screens/GameOverScreen";
 import GameScreen from "./screens/GameScreen";
 import StartGameScreen from "./screens/StartGameScreen";
 
+const loadFonts = () => {
+  return Font.loadAsync({
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+};
+
 export default function App() {
   const [selectedNumber, setSelectedNumber] = useState();
   const [rounds, setRounds] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  if (loading) {
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onFinish={() => setLoading(false)}
+        onError={(err) => console.log(err)}
+      />
+    );
+  }
 
   const resetGameHandler = () => {
     setRounds(0);

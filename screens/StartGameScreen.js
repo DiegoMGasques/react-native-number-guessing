@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     marginVertical: 10,
+    fontFamily: "open-sans-bold",
   },
   card: { width: 300, maxWidth: "80%", alignItems: "center" },
   input: {
