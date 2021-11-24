@@ -11,6 +11,7 @@ import {
 
 import Card from "../components/Card";
 import Input from "../components/Input";
+import Typography from "../components/Typography";
 import colors from "../styles/theme/colors";
 
 const StartGameScreen = ({ onStartGame }) => {
@@ -64,9 +65,10 @@ const StartGameScreen = ({ onStartGame }) => {
   return (
     <TouchableWithoutFeedback onPress={closeKeyboard}>
       <View style={styles.screen}>
-        <Text style={styles.sectionTitle}>Start a new game!</Text>
+        <Typography variant="h4">Start a new game!</Typography>
+        <View style={{ marginVertical: 8 }} />
         <Card style={styles.card}>
-          <Text>Select a number!</Text>
+          <Typography variant="h6">Select a number!</Typography>
           <Input
             style={styles.input}
             blurOnSubmit
