@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, Button, Alert, FlatList } from "react-native";
 import Card from "../components/Card";
+import Typography from "../components/Typography";
 import colors from "../styles/theme/colors";
 
 const generateRandomBetween = (min, max, exclude) => {
@@ -15,18 +16,22 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
+const generateId = () => Math.round(Math.random() * 10000).toString();
+
 const GameScreen = ({ userChoice, onGameOver }) => {
-  const [currGuess, setCurrGuess] = useState(
-    generateRandomBetween(1, 100, userChoice)
-  );
-  const [steps, setSteps] = useState(0);
+  const startingGuess = {
+    value: generateRandomBetween(1, 100, userChoice),
+    id: generateId(),
+  };
+  const [currGuess, setCurrGuess] = useState(startingGuess.value);
+  const [guesses, setGuesses] = useState([startingGuess]);
 
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
   useEffect(() => {
     if (currGuess === userChoice) {
-      onGameOver(steps);
+      onGameOver(guesses.length);
     }
   }, [currGuess, userChoice, onGameOver]);
 
@@ -47,13 +52,40 @@ const GameScreen = ({ userChoice, onGameOver }) => {
       currentLow.current = currGuess;
     }
 
-    const newGuess = generateRandomBetween(
+    const value = generateRandomBetween(
       currentLow.current,
       currentHigh.current,
       currGuess
     );
-    setCurrGuess(newGuess);
-    setSteps((curr) => (curr += 1));
+
+    const newGuess = {
+      id: generateId(),
+      value,
+    };
+
+    setCurrGuess(value);
+    setGuesses((guesses) => [newGuess, ...guesses]);
+  };
+
+  const renderListGuess = ({ item, index }) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginVertical: 8,
+          paddingVertical: 30,
+          paddingHorizontal: 60,
+          backgroundColor: "rgba(0,0,0,.03)",
+          width: "100%",
+        }}
+      >
+        <Typography variant="h5">#{(index - guesses.length) * -1}</Typography>
+        <Typography variant="h5" style={{ color: "darkblue" }}>
+          {item.value}
+        </Typography>
+      </View>
+    );
   };
 
   return (
@@ -76,6 +108,13 @@ const GameScreen = ({ userChoice, onGameOver }) => {
             />
           </View>
         </View>
+      </Card>
+      <Card>
+        <FlatList
+          data={guesses}
+          renderItem={renderListGuess}
+          keyExtractor={(item) => item.id}
+        />
       </Card>
     </View>
   );
