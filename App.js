@@ -48,7 +48,11 @@ export default function App() {
       <Header title="Guess a number" />
       {selectedNumber ? (
         rounds > 0 ? (
-          <GameOverScreen rounds={rounds} onReset={resetGameHandler} />
+          <GameOverScreen
+            rounds={rounds}
+            guessed={selectedNumber}
+            onReset={resetGameHandler}
+          />
         ) : (
           <GameScreen
             userChoice={selectedNumber}
